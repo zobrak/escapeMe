@@ -13,7 +13,9 @@ void EmConf::on_pushButtonSave_clicked()
 {
     QMessageBox::information(this, "Info !", "Le bouton Save a été cliqué");
     int decalage = ui->dCalageComboBox->currentText().toInt();
-    EmFunctions::crypt(decalage, ui->phraseLineEdit->text());
+    QString cryptedChain;
+    cryptedChain=EmFunctions::crypt(decalage, ui->phraseLineEdit->text());
+    QMessageBox::information(this, "Info !", cryptedChain);
 }
 
 EmConf::~EmConf()

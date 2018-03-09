@@ -7,7 +7,7 @@ class EmFunctions
 
 public:
     EmFunctions();
-    static QString crypt(int arg1, QString arg2);
+    static QString crypt(const int &arg1, const QString &arg2);
 
 private:
 
