@@ -24,24 +24,55 @@ QString EmFunctions::crypt(const int &arg1, const QString &arg2)
     tmpStr.replace(QRegExp("[ôöÔÖ]"), "o");
     tmpStr.replace(QRegExp("[ç]"),"c");
     tmpStr = tmpStr.toUpper();
+    int strLenght = tmpStr.size();
+    int value;
+    QVector<QChar> tmpIn(strLenght);
+    QVector<QChar> tmpOut(strLenght);
+    QVector<QChar> alphabetVector(26);
+    QVector<int> tmpElements(strLenght);
+    QString alphabetString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    //Tranformation du QSTring tmpStr en QVector
+    for (int i(0); i<strLenght; i++)
+        tmpIn.push_back(tmpStr.at(i));
+    //Transformation de alphabet en Qvector
+    for(int i(0); i<26 ; i++)
+            alphabetVector.push_back(alphabetString.at(i));
+    //Boucle de décalage. On parcourt la chaine à chiffer et on enregistre une 'value' pour chaque élément
+    for (int i(0); i<strLenght; i++)
+    {
+        for (int j(0); j<26; j++)
+        {
+            if(tmpIn.at(i) == alphabetVector.at(j))
+            {
+                value = j - decalage;
+                if(value<0)
+                {
+                    value = 26+value;
+                }
+                if(value >= 26)
+                    tmpElements.replace(i, (value % 26));
+                else
+                    tmpElements.replace(i, value);
+            }
+         }
+    }
+    //Pour chaque valeur du tableau éléments, on enregistre le caractère correspondant dans tmpOut
+    for (int i(0); i<strLenght; i++)
+    {
+        for(int j(0); j<26; j++)
+        {
+            if(tmpElements.at(i) == j)
+                tmpOut.replace(i, alphabetVector.at(j));
 
-/*//Conversion de la chaine tmpStr en QByteArray
-   const char* tmpChar = tmpStr.toStdString().c_str();
-   QByteArray outChain;
-   outChain=tmpChar;
-   qDebug() << outChain;
-   outChain=tmpStr.toLocal8Bit();
-   qDebug() << outChain;
-   QByteArray alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-   qDebug() << alphabet;
-   QByteArray alphabetCrypted;
-   alphabetCrypted.resize(26);
-   qDebug() << alphabetCrypted;
-//   for(int i(0); i<alphabetCrypted.end(); i++)
-//        alphabetCrypted.at(i) =alphabet.at(i+decalage);
-//    qDebug() << alphabet;
-//    qDebug() << alphabetCrypted;
-*/
+        }
+    }
 
-    return tmpStr;
+    //Conversion du QVector en Qstring
+    QString tmpStr2;
+    for(int i(0); i<strLenght; i++)
+        tmpStr2 += tmpOut.at(i);
+
+
+
+    return tmpStr2;
 }
