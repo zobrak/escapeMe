@@ -1,5 +1,6 @@
 #include "emfunctions.h"
-#include <QDebug>
+
+
 
 EmFunctions::EmFunctions()
 {
@@ -16,58 +17,63 @@ QString EmFunctions::crypt(const int &arg1, const QString &arg2)
  * - Remplacement des accents.
  * - Passage en majuscule.
  */
-    tmpStr.remove(QRegExp("\\W"));
-    tmpStr.replace(QRegExp("[éèëêËÊ]"),"e");
+
+    tmpStr.remove(QRegExp("\\W")); //Suppression des ponctuations et symboles
+    tmpStr.replace(QRegExp("[éèëêËÊ]"),"e"); // Remplacement des accents
     tmpStr.replace(QRegExp("[àâäÄÂ]"), "a");
     tmpStr.replace(QRegExp("[iïîÏÎ]"), "i");
     tmpStr.replace(QRegExp("[ùüÜûÛ]"), "u");
     tmpStr.replace(QRegExp("[ôöÔÖ]"), "o");
     tmpStr.replace(QRegExp("[ç]"),"c");
     tmpStr = tmpStr.toUpper();
+
     int strLenght = tmpStr.size();
     int value;
+    int alphabetLenght = alphabetString.size();
+
+    QString alphabetString = QObject::tr("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+
     QVector<QChar> tmpIn(strLenght);
     QVector<QChar> tmpOut(strLenght);
-    QVector<QChar> alphabetVector(26);
+    QVector<QChar> alphabetVector(alphabetLenght);
     QVector<int> tmpElements(strLenght);
-    QString alphabetString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    //Tranformation du QSTring tmpStr en QVector
+
+//Tranformation du QSTring tmpStr en QVector
     for (int i(0); i<strLenght; i++)
-        tmpIn.push_back(tmpStr.at(i));
-    //Transformation de alphabet en Qvector
-    for(int i(0); i<26 ; i++)
-            alphabetVector.push_back(alphabetString.at(i));
-    //Boucle de décalage. On parcourt la chaine à chiffer et on enregistre une 'value' pour chaque élément
+        tmpIn.insert(i, tmpStr.at(i));
+
+//Transformation de alphabet en QVector
+    for(int i(0); i<alphabetLenght ; i++)
+        alphabetVector.insert(i, alphabetString.at(i));
+
+//Boucle de décalage. On parcourt la chaine à chiffer et on enregistre une 'value' pour chaque élément
     for (int i(0); i<strLenght; i++)
     {
-        for (int j(0); j<26; j++)
+        for (int j(0); j<alphabetLenght; j++)
         {
             if(tmpIn.at(i) == alphabetVector.at(j))
             {
-                value = j - decalage;
-                if(value<0)
-                {
-                    value = 26+value;
-                }
-                if(value >= 26)
-                    tmpElements.replace(i, (value % 26));
+                value = j + decalage;
+
+                if(value >= (alphabetLenght-value))
+                    tmpElements.insert(i, (value %alphabetLenght));
                 else
-                    tmpElements.replace(i, value);
+                    tmpElements.insert(i, value);
             }
          }
     }
-    //Pour chaque valeur du tableau éléments, on enregistre le caractère correspondant dans tmpOut
+//Pour chaque valeur du tableau éléments, on enregistre le caractère correspondant dans tmpOut
     for (int i(0); i<strLenght; i++)
     {
-        for(int j(0); j<26; j++)
+        for(int j(0); j<alphabetLenght; j++)
         {
             if(tmpElements.at(i) == j)
-                tmpOut.replace(i, alphabetVector.at(j));
+                tmpOut.insert(i, alphabetVector.at(j));
 
         }
     }
 
-    //Conversion du QVector en Qstring
+//Conversion du QVector en Qstring
     QString tmpStr2;
     for(int i(0); i<strLenght; i++)
         tmpStr2 += tmpOut.at(i);
