@@ -14,11 +14,6 @@ EmConf::EmConf(QWidget *parent) : QWidget(parent), ui(new Ui::EmConf)
     //Paramétrage et affichage de l'emplacement de sauvegarde par défaut
     m_placeToSave = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeme", QStandardPaths::LocateDirectory);
     ui->defaultPTSLabel->setText(m_placeToSave);
-    //Choix de la méthode de chiffrement
-    if(ui->radioButtonMethod1)
-        m_method = 1;
-    if(ui->radioButtonMethod2)
-        m_method = 2;
 
 //Connections
     QObject::connect(ui->pushButtonQuit, SIGNAL(clicked(bool)), qApp, SLOT(quit()));
@@ -36,6 +31,14 @@ void EmConf::on_chngSavPlace_clicked()
 void EmConf::on_pushButtonSave_clicked()
 {
 
+    //Choix de la méthode de chiffrement
+    if(ui->radioButtonMethod1->isChecked())
+        qDebug("m_method set to 1");
+        m_method = 1;
+    if(ui->radioButtonMethod2->isChecked())
+        qDebug("m_method set to 2");
+        m_method = 2;
+
     int decalage = ui->dCalageComboBox->currentText().toInt();
     QString cryptedChain;
 //appel de la fonction crypt()
@@ -50,7 +53,7 @@ void EmConf::on_pushButtonSave_clicked()
         QMessageBox::information(this, "Debug", ("La chaine chiffrée est : " + cryptedChain));
     }
 //debug :: appel pour test de la fonction deCrypt()
-    if(m_method = 1)
+    if(m_method == 1)
     {
         QString deCryptedChain=EmFunctions::deCrypt(decalage, cryptedChain);
         QMessageBox::information(this, "Debug", ("La chaine déchiffrée est : " + deCryptedChain));
@@ -60,7 +63,7 @@ void EmConf::on_pushButtonSave_clicked()
     bool gbox1 = ui->gboxWelcomeConf->isChecked();
     QString pinCode = ui->codePinLineEdit->text();
     int pinCodeInt = pinCode.toInt();
-    qDebug() << "pinCodeInt : " + pinCodeInt;
+    qDebug() << pinCodeInt;
     int method = 1;
     QString phrase = ui->phraseLineEdit->text();
 

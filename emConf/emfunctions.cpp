@@ -107,32 +107,36 @@ QString EmFunctions::crypt2(const QString &arg1)
     tmpStr.replace(QRegExp("[ôöÔÖ]"), "o");
     tmpStr.replace(QRegExp("[ç]"),"c");
     tmpStr = tmpStr.toUpper();
-qDebug() << "tmpStr :";
-qDebug() << tmpStr;
-    int strLenght = tmpStr.size();
-qDebug() << " strLenght";
-qDebug() << strLenght;
-    int nbBlocks = 0;
 
-    for (double i=strLenght; i>=(qFloor(strLenght/5)); i--)
-    {
-        if(strLenght%5 == 0)
-        nbBlocks = i;
-qDebug("nbBlocks");
-qDebug() << nbBlocks;
-    }
-    QVector<QString> cryptedBlocks(nbBlocks);
-    for(int i(0); i<strLenght; i++)
-    {
-        for (int j(0); j==nbBlocks; j++)
-        {
-            if(i%nbBlocks == j)
-            cryptedBlocks.insert(j ,tmpStr.at(i));
-        }
-    }
+    int strLenght = tmpStr.size();
+    int nbBlocks = 6;
+    qDebug() << nbBlocks;
+
+
+   QString block0 = tmpStr.at(0);
+   QString block1 = tmpStr.at(1);
+   QString block2 = tmpStr.at(2);
+   QString block3 = tmpStr.at(3);
+   QString block4 = tmpStr.at(4);
+   QString block5 = tmpStr.at(5);
+
+   for(int i(6); i<strLenght; i++)
+   {
+       if(i%nbBlocks == 0)
+           block0 += tmpStr.at(i);
+       if(i%nbBlocks == 1)
+           block1 += tmpStr.at(i);
+       if(i%nbBlocks == 2)
+           block2 += tmpStr.at(i);
+       if(i%nbBlocks == 3)
+           block3 += tmpStr.at(i);
+       if(i%nbBlocks == 4)
+           block4 += tmpStr.at(i);
+       if(i%nbBlocks == 5)
+           block5 += tmpStr.at(i);
+   }
     QString tmpOut;
-    for(int i(0); i<nbBlocks; i++)
-        tmpOut+=cryptedBlocks.at(i);
+    tmpOut = block0 + "-" + block1 + "-" + block2 + "-" + block3 + "-" + block4 + "-" + block5;
     return tmpOut;
 }
 QString EmFunctions::deCrypt(const int &arg1, const QString &arg2)
@@ -194,7 +198,6 @@ QString EmFunctions::deCrypt(const int &arg1, const QString &arg2)
     QString tmpStr2;
     for(int i(0); i<strLenght; i++)
         tmpStr2 += tmpOut.at(i);
-
 
 
     return tmpStr2;
