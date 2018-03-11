@@ -7,6 +7,18 @@ EmFunctions::EmFunctions()
 
 }
 
+QString EmFunctions::setPlaceToSave(const QString &arg1)
+{
+    QString placeToSave =  QFileDialog::getExistingDirectory(NULL, "Choisir l'emplacement de sauvegarde");
+    if(placeToSave == "")
+    {
+         QMessageBox::warning(NULL, "Attention !", "L'emplacement de sauvegarde n'a pas été modifié");
+                 return arg1;
+
+    }
+    QMessageBox::information(NULL, "Emplacement de sauvegarde", "Vous avez sélectionné :\n" + placeToSave);
+    return placeToSave;
+}
 QString EmFunctions::crypt(const int &arg1, const QString &arg2)
 {
     QString tmpStr(arg2);

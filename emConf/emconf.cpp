@@ -10,8 +10,20 @@ EmConf::EmConf(QWidget *parent) : QWidget(parent), ui(new Ui::EmConf)
     ui->codePinLineEdit->setText("0000");
     ui->phraseLineEdit->setText("Le chien a l'air d'avoir faim");
     QObject::connect(ui->pushButtonQuit, SIGNAL(clicked(bool)), qApp, SLOT(quit()));
+    QString defaultPlaceToSave = QStandardPaths::displayName(QStandardPaths::GenericDataLocation);
+
+    ui->defaultPTSLabel->setText(defaultPlaceToSave);
+    m_placeToSave = defaultPlaceToSave;
 }
 
+void EmConf::on_chngSavPlace_clicked()
+{
+   QString tmpStr = m_placeToSave;
+   tmpStr = EmFunctions::setPlaceToSave(tmpStr);
+   m_placeToSave = tmpStr;
+    ui->defaultPTSLabel->setText(m_placeToSave);
+
+}
 void EmConf::on_pushButtonSave_clicked()
 {
 

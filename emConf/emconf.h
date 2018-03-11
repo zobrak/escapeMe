@@ -18,9 +18,11 @@ public:
 
 private slots:
     void on_pushButtonSave_clicked();
+    void on_chngSavPlace_clicked();
 
 private:
     Ui::EmConf *ui;
+    QString m_placeToSave;
 };
 
 #endif // EMCONF_H

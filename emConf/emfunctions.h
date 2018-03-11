@@ -7,6 +7,7 @@ class EmFunctions
 
 public:
     EmFunctions();
+    static QString setPlaceToSave(const QString &arg1);
     static QString crypt(const int &arg1, const QString &arg2);
     static QString deCrypt(const int &arg1, const QString &arg2);
     static void writeToConf(const bool &arg1, const QString &arg2, const QString &arg3);

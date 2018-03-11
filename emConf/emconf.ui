@@ -72,80 +72,109 @@
    </item>
    <item>
     <layout class="QVBoxLayout" name="vlayoutvbox1">
+     <property name="leftMargin">
+      <number>10</number>
+     </property>
+     <property name="rightMargin">
+      <number>10</number>
+     </property>
      <item>
-      <layout class="QHBoxLayout" name="hlayoutvlayout1">
-       <property name="leftMargin">
-        <number>0</number>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Emplacement du fichier de sauvegarde :</string>
        </property>
-       <item>
-        <widget class="QGroupBox" name="gboxWelcomeConf">
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="defaultPTSLabel">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="chngSavPlace">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Sauvegarder..</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="gboxWelcomeConf">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>47</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Vérouiller par un Code PIN</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>20</y>
+        <width>378</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formSetsWelcome">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetNoConstraint</enum>
+       </property>
+       <property name="horizontalSpacing">
+        <number>13</number>
+       </property>
+       <property name="leftMargin">
+        <number>13</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="codePinLabel">
+         <property name="text">
+          <string>Code Pin (4 chiffres) :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="codePinLineEdit">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>47</height>
-          </size>
+         <property name="maxLength">
+          <number>4</number>
          </property>
-         <property name="title">
-          <string>Vérouiller par un Code PIN</string>
+         <property name="clearButtonEnabled">
+          <bool>false</bool>
          </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <widget class="QWidget" name="layoutWidget">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>20</y>
-            <width>378</width>
-            <height>22</height>
-           </rect>
-          </property>
-          <layout class="QFormLayout" name="formSetsWelcome">
-           <property name="sizeConstraint">
-            <enum>QLayout::SetNoConstraint</enum>
-           </property>
-           <property name="horizontalSpacing">
-            <number>13</number>
-           </property>
-           <property name="leftMargin">
-            <number>13</number>
-           </property>
-           <item row="0" column="0">
-            <widget class="QLabel" name="codePinLabel">
-             <property name="text">
-              <string>Code Pin (4 chiffres) :</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="codePinLineEdit">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maxLength">
-              <number>4</number>
-             </property>
-             <property name="clearButtonEnabled">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
         </widget>
        </item>
       </layout>
-     </item>
-    </layout>
+     </widget>
+    </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="gboxCryptConf">
@@ -175,35 +204,10 @@
       </property>
       <layout class="QVBoxLayout" name="vlayoutvbox2">
        <item>
-        <widget class="QLabel" name="labelExplCrypt">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>110</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::Box</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;- La phrase que vous entrez sera transformée en MAJUSCULES.&lt;/p&gt;&lt;p&gt;- Les ponctuations seront ignorées, les espaces supprimés.&lt;/p&gt;&lt;p&gt;- La méthode de cryptage consiste à décaler les lettres d'un nombre N de places dans l'alphabet. Ainsi si N = 3, alors A = D.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Exemple : &lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;&amp;quot;Le chien a l'air d'avoir faim&amp;quot; &lt;/span&gt;sera traduit en :&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; font-style:italic;&quot;&gt;LECHIENALAIRDAVOIRFAIM&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Si le paramètre 'décalage' est fixé à 3, la phrase affichée sera :&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; font-style:italic;&quot;&gt;OHFKLNQODLUGDYRLUIDLP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
         <layout class="QFormLayout" name="formSetsCrypt">
+         <property name="fieldGrowthPolicy">
+          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+         </property>
          <item row="1" column="0">
           <widget class="QLabel" name="dCalageLabel">
            <property name="sizePolicy">
