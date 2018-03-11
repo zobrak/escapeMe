@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>515</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+   <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -19,7 +19,7 @@
   <property name="minimumSize">
    <size>
     <width>400</width>
-    <height>510</height>
+    <height>400</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -30,8 +30,8 @@
   </property>
   <property name="baseSize">
    <size>
-    <width>400</width>
-    <height>515</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -187,7 +187,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>300</height>
+       <height>140</height>
       </size>
      </property>
      <property name="title">
@@ -203,12 +203,25 @@
        </rect>
       </property>
       <layout class="QVBoxLayout" name="vlayoutvbox2">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetNoConstraint</enum>
+       </property>
        <item>
         <layout class="QFormLayout" name="formSetsCrypt">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetFixedSize</enum>
+         </property>
          <property name="fieldGrowthPolicy">
           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
          </property>
          <item row="1" column="0">
+          <widget class="QRadioButton" name="radioButtonMethod2">
+           <property name="text">
+            <string>Méthode de chiffrement n°2</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
           <widget class="QLabel" name="dCalageLabel">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -221,7 +234,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item row="2" column="1">
           <widget class="QComboBox" name="dCalageComboBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -362,15 +375,25 @@
            </item>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item row="3" column="0">
           <widget class="QLabel" name="phraseLabel">
            <property name="text">
             <string>Phrase</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="3" column="1">
           <widget class="QLineEdit" name="phraseLineEdit"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="radioButtonMethod1">
+           <property name="text">
+            <string>Méthode de chiffrement n°1</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

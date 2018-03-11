@@ -23,6 +23,7 @@ private slots:
 private:
     Ui::EmConf *ui;
     QString m_placeToSave;
+    int m_method;
 };
 
 #endif // EMCONF_H
