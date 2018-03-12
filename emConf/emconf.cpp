@@ -33,30 +33,26 @@ void EmConf::on_pushButtonSave_clicked()
 
     //Choix de la méthode de chiffrement
     if(ui->radioButtonMethod1->isChecked())
-        qDebug("m_method set to 1");
         m_method = 1;
     if(ui->radioButtonMethod2->isChecked())
-        qDebug("m_method set to 2");
         m_method = 2;
 
     int decalage = ui->dCalageComboBox->currentText().toInt();
     QString cryptedChain;
 //appel de la fonction crypt()
-    if (m_method == 1)
+    if(m_method == 1)
     {
-        cryptedChain=EmFunctions::crypt(decalage, ui->phraseLineEdit->text());
+        qDebug("m_method set to 1");
+        cryptedChain=EmFunctions::crypt(true, decalage, ui->phraseLineEdit->text());
         QMessageBox::information(this, "Debug", ("La chaine chiffrée est : " + cryptedChain));
+        QString deCryptedChain=EmFunctions::crypt(false, decalage, cryptedChain);
+        QMessageBox::information(this, "Debug", ("La chaine déchiffrée est : " + deCryptedChain));
     }
     if(m_method==2)
     {
+        qDebug("m_method set to 2");
         cryptedChain=EmFunctions::crypt2(ui->phraseLineEdit->text());
         QMessageBox::information(this, "Debug", ("La chaine chiffrée est : " + cryptedChain));
-    }
-//debug :: appel pour test de la fonction deCrypt()
-    if(m_method == 1)
-    {
-        QString deCryptedChain=EmFunctions::deCrypt(decalage, cryptedChain);
-        QMessageBox::information(this, "Debug", ("La chaine déchiffrée est : " + deCryptedChain));
     }
 
 //Appel de la fonction writeToConf(gbox1, QString )
@@ -65,7 +61,7 @@ void EmConf::on_pushButtonSave_clicked()
     int pinCodeInt = pinCode.toInt();
     qDebug() << pinCodeInt;
     int method = 1;
-    QString phrase = ui->phraseLineEdit->text();
+
 
     EmFunctions::writeToConf(gbox1, m_placeToSave, pinCodeInt, method, cryptedChain, decalage);
 
