@@ -153,6 +153,7 @@ void EmFunctions::writeToConf(const bool &arg1, // Est ce que la fenetre d'accue
 /* Fonction ayant pour objet de récupérer les paramètres enregistrés par la fenêtre EmConf
  *  et de les écrire dans un fichier .ini */
 
+
 //Emplacement de sauvegarde
     QString fileToSave = arg2;
     fileToSave+="/emConf.ini";

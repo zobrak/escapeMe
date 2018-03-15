@@ -6,6 +6,9 @@
 EmConf::EmConf(QWidget *parent) : QWidget(parent), ui(new Ui::EmConf)
 {
     ui->setupUi(this);
+
+
+
     QIntValidator* validPin = new QIntValidator(0,9999,ui->codePinLineEdit);
     //Paramètres d'initialisation de la fenêtre et des widgets
     ui->codePinLineEdit->setValidator(validPin);

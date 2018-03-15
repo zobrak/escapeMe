@@ -24,14 +24,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp
+    main.cpp \
+    pincode.cpp \
+    dechiffrer.cpp \
+    ../emConf/emfunctions.cpp
 
 HEADERS += \
-        mainwindow.h
+    ../emConf/emfunctions.h \
+    pincode.h \
+    dechiffrer.h
 
 FORMS += \
-        mainwindow.ui
+    pincode.ui \
+    dechiffrer.ui
 
 RESOURCES += \
     res.qrc
