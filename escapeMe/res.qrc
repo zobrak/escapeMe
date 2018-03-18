@@ -2,5 +2,13 @@
     <qresource prefix="/">
         <file>img/background.jpg</file>
         <file>img/escapeme.ico</file>
+        <file>img/white.png</file>
+        <file>img/black.png</file>
+        <file>img/transparent.png</file>
+        <file>img/idea.ico</file>
+        <file>img/help.ico</file>
+        <file>img/next.ico</file>
+        <file>txt/LICENSE</file>
+        <file>img/4x4.jpg</file>
     </qresource>
 </RCC>
