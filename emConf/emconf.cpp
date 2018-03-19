@@ -14,6 +14,8 @@ EmConf::EmConf(QWidget *parent) : QWidget(parent), ui(new Ui::EmConf)
     ui->codePinLineEdit->setValidator(validPin);
     ui->codePinLineEdit->setText("0000");
     ui->phraseLineEdit->setText("Le chien a l'air d'avoir faim");
+    ui->initialScore->setText("100");
+    ui->basicCost->setText("5");
     //Paramétrage et affichage dans la fenêtre de l'emplacement de sauvegarde par défaut
     m_placeToSave = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "", QStandardPaths::LocateDirectory);
     ui->defaultPTSLabel->setText(m_placeToSave);
@@ -65,9 +67,12 @@ void EmConf::on_pushButtonSave_clicked()
     int pinCodeInt = pinCode.toInt();
     qDebug() << pinCodeInt;
     int method = 1;
+    bool scoresActivated = ui->groupBox->isChecked();
+    int score = ui->initialScore->text().toInt();
+    int cost = ui->basicCost->text().toInt();
 
 
-    EmFunctions::writeToConf(gbox1, m_placeToSave, pinCodeInt, method, cryptedChain, decalage);
+    EmFunctions::writeToConf(gbox1, m_placeToSave, pinCodeInt, method, cryptedChain, decalage, scoresActivated, score, cost);
 
 }
 

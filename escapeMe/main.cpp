@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("escape.Me");
-    QCoreApplication::setApplicationVersion("0.5.0");
+    QCoreApplication::setApplicationVersion("0.6.0");
     QCoreApplication::setOrganizationName("ZobraK");
     QCoreApplication::setOrganizationDomain("zobrak.net");
     QApplication a(argc, argv);

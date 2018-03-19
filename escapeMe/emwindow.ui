@@ -110,7 +110,7 @@
        <rect>
         <x>90</x>
         <y>30</y>
-        <width>561</width>
+        <width>571</width>
         <height>70</height>
        </rect>
       </property>
@@ -191,7 +191,7 @@ color: rgb(52, 101, 164);</string>
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="codepin">
       <layout class="QGridLayout" name="gridLayout_4">
@@ -685,7 +685,7 @@ background-color: rgb(46, 52, 54);</string>
         </spacer>
        </item>
        <item row="2" column="1" colspan="3">
-        <widget class="QLineEdit" name="lineEdit_2">
+        <widget class="QLineEdit" name="teamNameEdit">
          <property name="font">
           <font>
            <pointsize>18</pointsize>
@@ -742,7 +742,7 @@ color: rgb(78, 154, 6);</string>
         </spacer>
        </item>
        <item row="3" column="1" colspan="3">
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="className">
          <property name="font">
           <font>
            <pointsize>18</pointsize>
@@ -984,7 +984,7 @@ color: rgb(78, 154, 6);</string>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QLabel" name="label_5">
+    <widget class="QLabel" name="scoreLbl">
      <property name="text">
       <string>Score :</string>
      </property>

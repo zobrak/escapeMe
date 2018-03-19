@@ -1,0 +1,26 @@
+last publishing date : march 19, 2018
+
+emConf 
+v1.1.0
+- New features :
+-- Score module configuration
+--- Activation of the module
+--- Setting of the initial amount of credits the player's got.
+--- Setting of the basic cost of a missed operation (failed pinCode, requesting help)
+- Impovements :
+-- Design of the window has been improved to be more responsive.
+previous versions
+I have to write this section.
+
+escapeMe 
+v0.6.0
+- New features :
+-- Help is provided at different steps of the game. Requesting help cost some credits
+   and impact the final score.
+-- Saving of scores is now avalaible.
+- Improvements :
+-- Code rewritted to fit the new emConf features (dynamic member implementation instead of
+   static implementation
+previous versions
+I have to write this section
+

@@ -1,7 +1,6 @@
 #include "emfunctions.h"
 
 
-
 EmFunctions::EmFunctions()
 {
 
@@ -148,7 +147,10 @@ void EmFunctions::writeToConf(const bool &arg1, // Est ce que la fenetre d'accue
                               const int &arg3, // Code PIN
                               const int &arg4, // méthode de chiffrement
                               const QString &arg5, // Phrase à chiffrer
-                              const int &arg6) // Valeur du décalage
+                              const int &arg6, // Valeur du décalage
+                              const bool &arg7, // Module scores activé ?
+                              const int &arg8, // Score initial
+                              const int &arg9) // coût opération
 {
 /* Fonction ayant pour objet de récupérer les paramètres enregistrés par la fenêtre EmConf
  *  et de les écrire dans un fichier .ini */
@@ -182,5 +184,13 @@ void EmFunctions::writeToConf(const bool &arg1, // Est ce que la fenetre d'accue
            confFile->setValue("sentence", arg5);
 
        confFile->endGroup();
+    // Groupe [Scores]
+       confFile->beginGroup("Scores");
+           confFile->setValue("isActivated", arg7);
+           confFile->setValue("initialScore", arg8);
+           confFile->setValue("basicAmount", arg9);
+
+    confFile->endGroup();
+    delete confFile;
     return;
 }

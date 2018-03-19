@@ -16,9 +16,10 @@ public:
     int readConfigPinCode();
     bool readConfigIsPinActivated();
     void readConfigDecrypt();
-    void initializeScore();
+    void readConfigScores();
     void pinDisplayHelpNr1();
     QString getConfFile();
+    QString getScoreFile();
 
     ~EmWindow();
 
@@ -49,12 +50,17 @@ private slots:
     void on_buttonDecryptValid_clicked();
     void on_buttonQuit2_clicked();
     void on_stackedWidget_currentChanged(int arg1);
-
     void on_buttonContinue2_clicked();
+
+    //Slots fenêtre scores
+    void on_buttonQuitP3_clicked();
+    void on_buttonSave_clicked();
 
 private:
     Ui::EmWindow *ui;
     QString m_confFile;
+    QString m_scoreFile;
+
     //Pincode module
     int m_confPin;
     int m_lcdValue;
@@ -68,18 +74,26 @@ private:
     int num7 = 7;
     int num8 = 8;
     int num9 = 9;
+    int m_count = 3;
+    bool m_pinFound = false;
+
     //Decrypt module
     QString m_secret;
     int m_decalage;
     QString m_answer;
+    int m_method;
 
     //Scores module
     int m_userCredit;
+    int m_initialScore;
+    int m_basicAmount;
+    bool m_scoreIsActivated;
+    bool m_scoreRegistered = false;
 
     void backgroundImage();
     void tips();
     void afficherPin(const int &number);
-
+    void initializeUserScore();
     void spendCredit(const int &amount);
     void winCredit(const int &amount);
 
