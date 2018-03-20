@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QTextEdit>
 #include <QFile>
+#include <QKeySequence>
 
 EmWindow::EmWindow(QWidget *parent) :
     QWidget(parent),
@@ -15,6 +16,7 @@ EmWindow::EmWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
     setFixedSize(780,480);
+    help_count = 3;
 
     //Initialisation des scores
     readConfigScores();
@@ -48,10 +50,11 @@ EmWindow::EmWindow(QWidget *parent) :
     {
         ui->stackedWidget->setCurrentIndex(0);
         ui->stackedWidget->setCurrentIndex(1);
-
     }
 
+    QShortcut *shrtcutLaunchConf = new QShortcut(tr("Ctrl+Shift+C"), this);
     //Connections
+    connect(shrtcutLaunchConf, SIGNAL(activated()), this, SLOT(openConfig()));
 }
 
 EmWindow::~EmWindow()
@@ -60,6 +63,12 @@ EmWindow::~EmWindow()
 }
 
 //Fonctions internes
+void EmWindow::openConfig()
+{
+    QProcess *config = new QProcess();
+    QString programm = "/home/cmatic/devProjects/escapeMe/build-emConf-Desktop_Qt_5_10_1_GCC_64bit-Release/emConf";
+    config->start(programm);
+}
 QString EmWindow::getConfFile()
 {
     m_confFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "", QStandardPaths::LocateDirectory);
@@ -114,7 +123,7 @@ void EmWindow::readConfigScores()
 void EmWindow::tips()
 {
     if(ui->stackedWidget->currentIndex() == 0)
-        ui->emMessage->setText(tr("Entrez le code de dévérouillage..."));
+        ui->emMessage->setText(tr("Entrez le code de dévérouillage...\n(code à 4 chiffres)"));
     if(ui->stackedWidget->currentIndex() == 1)
         ui->emMessage->setText(tr("Déchiffrez la phrase cryptée"));
     if(ui->stackedWidget->currentIndex() == 2)
@@ -305,8 +314,9 @@ void EmWindow::viewLicense()
           {
             QString line = in.readLine();
             licenseContent += line;
+            licenseContent += "\n";
           }
-   displayLicense->setPlainText(licenseContent);
+   displayLicense->setText(licenseContent);
    displayLicense->setReadOnly(true);
    buttonCloseLicWindow->setText(tr("Ok"));
    licLayout->addWidget(displayLicense);
@@ -334,6 +344,7 @@ void EmWindow::on_buttonHelp_clicked()
         int confirmHelp =  QMessageBox::question(this,tr("Attention !!!"), messageQuestion);
         if(confirmHelp== QMessageBox::Yes)
         {
+            help_count--;
             spendCredit(m_basicAmount);
             switch(ui->stackedWidget->currentIndex())
             {
@@ -344,16 +355,31 @@ void EmWindow::on_buttonHelp_clicked()
             case 1:
                 if(m_method == 1)
                 {
-                    QDesktopServices::openUrl(QUrl("https://fr.wikipedia.org/wiki/Chiffrement_par_d%C3%A9calage", QUrl::TolerantMode));
-                    ui->emMessage->setText(msgWindow);
-                    break;
+                    if(help_count == 2)
+                        {
+                            QDesktopServices::openUrl(QUrl("https://fr.wikipedia.org/wiki/Chiffrement_par_d%C3%A9calage", QUrl::TolerantMode));
+                            ui->emMessage->setText(msgWindow);
+                            break;
+                        }
+                    if(help_count == 1)
+                        {
+                            QString msg;
+                            msg = "Le décalage utilisé pour ce chiffrement est de : ";
+                            msg += QString::number(m_decalage);
+                            QMessageBox::information(this,"Astuce", msg);
+                            break;
+                        }
+                    if(help_count == 0)
+                        qDebug() << help_count;
                 }
+
                 if(m_method == 2)
                 {
                     QString msg;
                     msg += tr("C'est un tableau, avec des lignes et des colonnes...\n");
                     msg += msgWindow;
                     ui->emMessage->setText(msg);
+                    break;
                 }
             case 2:
                ui->emMessage->setText(msgWindow);
@@ -483,6 +509,8 @@ void EmWindow::validerPin()
         ui->emMessage->setText(tr("Vous avez déjà trouvé le code.\nInutile de chercher à gagner des points en trichant : -2 points !"));
         ui->entr->setDisabled(true);
     }
+
+
 }
 
 //Slots fenêtre déchiffrer
@@ -493,8 +521,9 @@ void EmWindow::on_buttonDecryptValid_clicked()
     m_answer = EmFunctions::crypt(true, m_decalage, m_answer);
     if(m_answer == m_secret)
     {
-            ui->emMessage->setText("Bravo ! Vous avez trouvé");
-            winCredit(m_basicAmount);
+        ui->buttonContinue2->setDisabled(false);
+        ui->emMessage->setText("Bravo ! Vous avez trouvé");
+        winCredit(4*m_basicAmount);
     }
     else
     {
@@ -510,6 +539,7 @@ void EmWindow::on_buttonQuit2_clicked()
 void EmWindow::on_buttonContinue2_clicked()
 {
     ui->stackedWidget->setCurrentIndex(2);
+    ui->finalScoreLcdNumber->display(m_userCredit);
     tips();
 }
 

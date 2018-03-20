@@ -18,8 +18,11 @@ public:
     void readConfigDecrypt();
     void readConfigScores();
     void pinDisplayHelpNr1();
+
     QString getConfFile();
     QString getScoreFile();
+
+
 
     ~EmWindow();
 
@@ -28,6 +31,7 @@ private slots:
 
     void on_buttonHelp_clicked();
     void about();
+    void openConfig();
 
     //Slots fenetre pincode
     void on_buttonQuit1_clicked();
@@ -75,6 +79,7 @@ private:
     int num8 = 8;
     int num9 = 9;
     int m_count = 3;
+    int help_count;
     bool m_pinFound = false;
 
     //Decrypt module

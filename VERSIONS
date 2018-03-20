@@ -1,4 +1,4 @@
-last publishing date : march 19, 2018
+last publishing date : march 20, 2018
 
 emConf 
 v1.1.0
@@ -13,6 +13,12 @@ previous versions
 I have to write this section.
 
 escapeMe 
+v0.7.0
+- New feature
+-- Shortcut Ctrl+Shift+C opens emConf
+v0.6.1
+- Bug fix
+-- Fixed a bug in the License display window.
 v0.6.0
 - New features :
 -- Help is provided at different steps of the game. Requesting help cost some credits
