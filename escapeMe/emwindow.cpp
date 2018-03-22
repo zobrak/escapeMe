@@ -66,22 +66,36 @@ EmWindow::~EmWindow()
 void EmWindow::openConfig()
 {
     QProcess *config = new QProcess();
-    QString programm = "/home/cmatic/devProjects/escapeMe/build-emConf-Desktop_Qt_5_10_1_GCC_64bit-Release/emConf";
-    config->start(programm);
+    QString programmPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "", QStandardPaths::LocateDirectory);
+    programmPath +="emConf.exe";
+logMessage("[openconfig()] programmPath set to :");
+logMessage(programmPath);
+    //QString programm = "/home/cmatic/devProjects/escapeMe/build-emConf-Desktop_Qt_5_10_1_GCC_64bit-Release/emConf";
+    config->start(programmPath);
 }
 QString EmWindow::getConfFile()
 {
-    m_confFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "", QStandardPaths::LocateDirectory);
-    m_confFile += "emConf.ini";
+    m_confFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
+    m_confFile += "/emConf.ini";
+logMessage("[getConfFile()] - confFile path :");
+logMessage(m_confFile);
     return m_confFile;
 }
 QString EmWindow::getScoreFile()
 {
-    m_scoreFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "", QStandardPaths::LocateDirectory);
-    m_scoreFile += "scores.txt";
+    m_scoreFile = QStandardPaths::locate(QStandardPaths::DocumentsLocation, "", QStandardPaths::LocateDirectory);
+    m_scoreFile += "escapeMeScores.txt";
+logMessage("[getScoreFile() - m_scoreFile :");
+logMessage(m_scoreFile);
     return m_scoreFile;
 }
-
+QString EmWindow::getLogFile()
+{
+    m_logFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
+    m_logFile += "/debug.log";
+qDebug() << "m_logfile set to : " << m_logFile;
+    return m_logFile;
+}
 bool EmWindow::readConfigIsPinActivated()
 {
     getConfFile();
@@ -516,21 +530,31 @@ void EmWindow::validerPin()
 //Slots fenêtre déchiffrer
 void EmWindow::on_buttonDecryptValid_clicked()
 {
-    spendCredit(m_basicAmount);
-    m_answer=ui->answerLineEdit->text();
-    m_answer = EmFunctions::crypt(true, m_decalage, m_answer);
-    if(m_answer == m_secret)
+    if(!m_sentenceFound)
     {
-        ui->buttonContinue2->setDisabled(false);
-        ui->emMessage->setText("Bravo ! Vous avez trouvé");
-        winCredit(4*m_basicAmount);
+        spendCredit(m_basicAmount);
+        m_answer=ui->answerLineEdit->text();
+        m_answer = EmFunctions::crypt(true, m_decalage, m_answer);
+        if(m_answer == m_secret)
+        {
+            m_sentenceFound = true;
+            ui->buttonContinue2->setDisabled(false);
+            ui->emMessage->setText("Bravo ! Vous avez trouvé");
+            winCredit(4*m_basicAmount);
+        }
+        else
+        {
+            ui->emMessage->setText("Mauvaise réponse, cherchez encore !");
+            ui->answerLineEdit->setText("");
+        }
+        return;
     }
     else
     {
-        ui->emMessage->setText("Mauvaise réponse, cherchez encore !");
-        ui->answerLineEdit->setText("");
+        spendCredit(2);
+        ui->emMessage->setText(tr("Vous avez déjà trouvé la phrase.\nInutile de chercher à gagner des points en trichant :\n -2 points !"));
+        ui->buttonDecryptValid->setDisabled(true);
     }
-    return;
 }
 void EmWindow::on_buttonQuit2_clicked()
 {
@@ -586,6 +610,17 @@ void EmWindow::on_buttonSave_clicked()
     QMessageBox::information(this, tr("Information"), tr("Votre score a été enregistré"));
     return;
     }
+}
+void EmWindow::logMessage(const QString &arg1)
+{
+    getLogFile();
+    QString tmp = arg1;
+    tmp += "\n";
+    QFile log(m_logFile);
+    if (!log.open(QIODevice::Append | QIODevice::Text))
+        return;
+    QTextStream out(&log);
+    out << tmp;
 }
 
 

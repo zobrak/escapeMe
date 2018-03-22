@@ -7,6 +7,9 @@ EmConf::EmConf(QWidget *parent) : QWidget(parent), ui(new Ui::EmConf)
 {
     ui->setupUi(this);
 
+    //As far as the crypt method nr 2 isn't operational we disable possibiliy to choose it
+    ui->radioButtonMethod2->setDisabled(true);
+
 
 
     QIntValidator* validPin = new QIntValidator(0,9999,ui->codePinLineEdit);
@@ -17,7 +20,7 @@ EmConf::EmConf(QWidget *parent) : QWidget(parent), ui(new Ui::EmConf)
     ui->initialScore->setText("100");
     ui->basicCost->setText("5");
     //Paramétrage et affichage dans la fenêtre de l'emplacement de sauvegarde par défaut
-    m_placeToSave = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "", QStandardPaths::LocateDirectory);
+    m_placeToSave = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
     ui->defaultPTSLabel->setText(m_placeToSave);
 
     //Connections

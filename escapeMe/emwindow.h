@@ -18,9 +18,11 @@ public:
     void readConfigDecrypt();
     void readConfigScores();
     void pinDisplayHelpNr1();
+    void logMessage(const QString &arg1);
 
     QString getConfFile();
     QString getScoreFile();
+    QString getLogFile();
 
 
 
@@ -64,6 +66,7 @@ private:
     Ui::EmWindow *ui;
     QString m_confFile;
     QString m_scoreFile;
+    QString m_logFile;
 
     //Pincode module
     int m_confPin;
@@ -87,6 +90,7 @@ private:
     int m_decalage;
     QString m_answer;
     int m_method;
+    bool m_sentenceFound = false;
 
     //Scores module
     int m_userCredit;
