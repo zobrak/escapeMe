@@ -40,6 +40,7 @@ EmWindow::EmWindow(QWidget *parent) :
     bool pinWindow = readConfigIsPinActivated();
     if(pinWindow)
     {
+        ui->stackedWidget->setCurrentIndex(1);
         ui->stackedWidget->setCurrentIndex(0);
         ui->pinLcdNumber->display(0);
         ui->buttonContinue1->setDisabled(true);
@@ -55,8 +56,50 @@ EmWindow::EmWindow(QWidget *parent) :
     QShortcut *shrtcutLaunchConf = new QShortcut(tr("Ctrl+Shift+C"), this);
     //Connections
     connect(shrtcutLaunchConf, SIGNAL(activated()), this, SLOT(openConfig()));
-}
 
+
+
+}
+void EmWindow::afficher1()
+{
+    afficherPin(1);
+}
+void EmWindow::afficher2()
+{
+    afficherPin(2);
+}
+void EmWindow::afficher3()
+{
+    afficherPin(3);
+}
+void EmWindow::afficher4()
+{
+    afficherPin(4);
+}
+void EmWindow::afficher5()
+{
+    afficherPin(5);
+}
+void EmWindow::afficher6()
+{
+    afficherPin(6);
+}
+void EmWindow::afficher7()
+{
+    afficherPin(7);
+}
+void EmWindow::afficher8()
+{
+    afficherPin(8);
+}
+void EmWindow::afficher9()
+{
+    afficherPin(9);
+}
+void EmWindow::afficher0()
+{
+    afficherPin(0);
+}
 EmWindow::~EmWindow()
 {
     delete ui;
@@ -65,7 +108,7 @@ EmWindow::~EmWindow()
 //Fonctions internes
 void EmWindow::openConfig()
 {
-    QProcess *config = new QProcess();
+    QProcess *config = new QProcess(this);
     QString programmPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "", QStandardPaths::LocateDirectory);
     programmPath +="emConf.exe";
 logMessage("[openconfig()] programmPath set to :");
@@ -99,7 +142,7 @@ qDebug() << "m_logfile set to : " << m_logFile;
 bool EmWindow::readConfigIsPinActivated()
 {
     getConfFile();
-    QSettings* conf = new QSettings(m_confFile, QSettings::IniFormat, NULL);
+    QSettings* conf = new QSettings(m_confFile, QSettings::IniFormat, this);
     bool isActivated = conf->value("WelcomeWindow/isActivated").toBool();
     delete conf;
     return isActivated;
@@ -158,11 +201,21 @@ void EmWindow::backgroundImage()
 
 void EmWindow::afficherPin(const int &number)
 {
+    int tmp;
+
     if(ui->pinLcdNumber->intValue() == 0)
     {
         ui->pinLcdNumber->display(number);
         return;
     }
+    else
+    {
+        tmp = ui->pinLcdNumber->intValue();
+        tmp *= 10;
+        tmp += number;
+        ui->pinLcdNumber->display(tmp);
+    }
+/* old implementation, newer is simpler
     if(ui->pinLcdNumber->intValue() < 10)
     {
         int tmp;
@@ -189,7 +242,7 @@ void EmWindow::afficherPin(const int &number)
         tmp += number;
         ui->pinLcdNumber->display(tmp);
         return;
-    }
+    } */
 }
 
 void EmWindow::initializeUserScore()
@@ -213,10 +266,10 @@ void EmWindow::winCredit(const int &amount)
 
 void EmWindow::pinDisplayHelpNr1()
 {
-    QDialog* pinHelp1 = new QDialog;
-    QLabel* picture = new QLabel;
-    QPushButton* buttonClose = new QPushButton;
-    QVBoxLayout* dlgLayout = new QVBoxLayout;
+    QDialog* pinHelp1 = new QDialog(this);
+    QLabel* picture = new QLabel(this);
+    QPushButton* buttonClose = new QPushButton(this);
+    QVBoxLayout* dlgLayout = new QVBoxLayout(this);
     picture->setPixmap(QPixmap(":/img/4x4.jpg"));
     buttonClose->setText("Ok");
     dlgLayout->addWidget(picture);
@@ -233,21 +286,21 @@ void EmWindow::about()
     QDialog* aboutEscapeMe = new QDialog(this);
 
     aboutEscapeMe->setWindowTitle(tr("A propos de cette application..."));
-    QGridLayout* dlgLayout = new QGridLayout;
-    QLabel* appImage = new QLabel;
-    QLabel* appName = new QLabel;
-    QLabel* appVersion = new QLabel;
-    QLabel* authorNameLbl = new QLabel;
-    QLabel* authorNameValue = new QLabel;
-    QLabel* authorURLLbl = new QLabel;
-    QLabel* authorURLValue = new QLabel;
-    QLabel* sourcesLbl = new QLabel;
-    QLabel* sourcesURL = new QLabel;
-    QPushButton* buttonAboutQt = new QPushButton;
-    QLabel* devWith = new QLabel;
-    QLabel* appLicense = new QLabel;
-    QPushButton* buttonViewLicense = new QPushButton;
-    QPushButton* buttonCloseAbout = new QPushButton;
+    QGridLayout* dlgLayout = new QGridLayout(aboutEscapeMe);
+    QLabel* appImage = new QLabel(aboutEscapeMe);
+    QLabel* appName = new QLabel(aboutEscapeMe);
+    QLabel* appVersion = new QLabel(aboutEscapeMe);
+    QLabel* authorNameLbl = new QLabel(aboutEscapeMe);
+    QLabel* authorNameValue = new QLabel(aboutEscapeMe);
+    QLabel* authorURLLbl = new QLabel(aboutEscapeMe);
+    QLabel* authorURLValue = new QLabel(aboutEscapeMe);
+    QLabel* sourcesLbl = new QLabel(aboutEscapeMe);
+    QLabel* sourcesURL = new QLabel(aboutEscapeMe);
+    QPushButton* buttonAboutQt = new QPushButton(aboutEscapeMe);
+    QLabel* devWith = new QLabel(aboutEscapeMe);
+    QLabel* appLicense = new QLabel(aboutEscapeMe);
+    QPushButton* buttonViewLicense = new QPushButton(aboutEscapeMe);
+    QPushButton* buttonCloseAbout = new QPushButton(aboutEscapeMe);
 
     QString versionInfo;
         versionInfo = "Version : ";
@@ -316,9 +369,9 @@ qDebug() << srcURL;
 void EmWindow::viewLicense()
 {
     QDialog* license = new QDialog(this);
-    QVBoxLayout *licLayout = new QVBoxLayout;
-    QTextEdit* displayLicense = new QTextEdit;
-    QPushButton* buttonCloseLicWindow = new QPushButton;
+    QVBoxLayout *licLayout = new QVBoxLayout(license);
+    QTextEdit* displayLicense = new QTextEdit(license);
+    QPushButton* buttonCloseLicWindow = new QPushButton(license);
     QString licenseContent;
     QFile file(":/txt/LICENSE");
           if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -405,9 +458,34 @@ void EmWindow::on_buttonHelp_clicked()
 }
 void EmWindow::on_stackedWidget_currentChanged(int arg1)
 {
-    readConfigDecrypt();
     int currentIndex = arg1;
+    if(currentIndex == 0)
+    {
+        //Affichage dans pinLcdNumber en appuyant sur les touches
+        QShortcut *shrtcut1 = new QShortcut(tr("1"), this);
+        QShortcut *shrtcut2 = new QShortcut(tr("2"), this);
+        QShortcut *shrtcut3 = new QShortcut(tr("3"), this);
+        QShortcut *shrtcut4 = new QShortcut(tr("4"), this);
+        QShortcut *shrtcut5 = new QShortcut(tr("5"), this);
+        QShortcut *shrtcut6 = new QShortcut(tr("6"), this);
+        QShortcut *shrtcut7 = new QShortcut(tr("7"), this);
+        QShortcut *shrtcut8 = new QShortcut(tr("8"), this);
+        QShortcut *shrtcut9 = new QShortcut(tr("9"), this);
+        QShortcut *shrtcut0 = new QShortcut(tr("0"), this);
+        connect(shrtcut1, SIGNAL(activated()), this, SLOT(afficher1()));
+        connect(shrtcut2, SIGNAL(activated()), this, SLOT(afficher2()));
+        connect(shrtcut3, SIGNAL(activated()), this, SLOT(afficher3()));
+        connect(shrtcut4, SIGNAL(activated()), this, SLOT(afficher4()));
+        connect(shrtcut5, SIGNAL(activated()), this, SLOT(afficher5()));
+        connect(shrtcut6, SIGNAL(activated()), this, SLOT(afficher6()));
+        connect(shrtcut7, SIGNAL(activated()), this, SLOT(afficher7()));
+        connect(shrtcut8, SIGNAL(activated()), this, SLOT(afficher8()));
+        connect(shrtcut9, SIGNAL(activated()), this, SLOT(afficher9()));
+        connect(shrtcut0, SIGNAL(activated()), this, SLOT(afficher0()));
+    }
+
     if(currentIndex == 1)
+        readConfigDecrypt();
         ui->displaySentence->setText(m_secret);
 }
 
@@ -599,7 +677,7 @@ void EmWindow::on_buttonSave_clicked()
         scoreLine += ui->className->currentText();
         scoreLine += ";";
         scoreLine += QString::number(m_userCredit);
-        scoreLine += ";\n";
+        scoreLine += "\n";
         QFile file(m_scoreFile);
               if (!file.open(QIODevice::Append | QIODevice::Text))
                   return;

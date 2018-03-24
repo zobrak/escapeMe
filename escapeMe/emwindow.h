@@ -28,7 +28,20 @@ public:
 
     ~EmWindow();
 
+
 private slots:
+
+    void afficher1();
+    void afficher2();
+    void afficher3();
+    void afficher4();
+    void afficher5();
+    void afficher6();
+    void afficher7();
+    void afficher8();
+    void afficher9();
+    void afficher0();
+
     //Slots fenetre principale
 
     void on_buttonHelp_clicked();
