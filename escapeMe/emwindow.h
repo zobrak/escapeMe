@@ -2,6 +2,8 @@
 #define EMWINDOW_H
 
 #include <QWidget>
+#include <QProcess>
+#include <QSignalMapper>
 
 namespace Ui {
 class EmWindow;
@@ -17,6 +19,7 @@ public:
     bool readConfigIsPinActivated();
     void readConfigDecrypt();
     void readConfigScores();
+    void readConfigHelp();
     void pinDisplayHelpNr1();
     void logMessage(const QString &arg1);
 
@@ -28,25 +31,23 @@ public:
 
     ~EmWindow();
 
+signals :
+    void activated(int number);
+
+public slots:
+    void onErrorOccurred(QProcess::ProcessError error);
+    void onFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 private slots:
 
-    void afficher1();
-    void afficher2();
-    void afficher3();
-    void afficher4();
-    void afficher5();
-    void afficher6();
-    void afficher7();
-    void afficher8();
-    void afficher9();
-    void afficher0();
+    void afficher(int number);
 
     //Slots fenetre principale
 
     void on_buttonHelp_clicked();
     void about();
     void openConfig();
+
 
     //Slots fenetre pincode
     void on_buttonQuit1_clicked();
@@ -80,6 +81,9 @@ private:
     QString m_confFile;
     QString m_scoreFile;
     QString m_logFile;
+    QSignalMapper *shrtcutMapper;
+    QString m_helpImg;
+    bool m_helpImgActivated;
 
     //Pincode module
     int m_confPin;

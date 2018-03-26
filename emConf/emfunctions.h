@@ -11,7 +11,8 @@ public:
     static QString crypt(bool const &way, const int &arg1, const QString &arg2);
     static QString crypt2(const QString &arg1);
     static void writeToConf(const bool &arg1, const QString &arg2, const int &arg3, const int &arg4, const QString &arg5, const int &arg6, const bool &arg7,
-                            const int &arg8, const int &arg9);
+                            const int &arg8, const int &arg9, bool &arg10, QString &arg11);
+    static QString setHelpImg(const QString &arg1);
 
 private:
 

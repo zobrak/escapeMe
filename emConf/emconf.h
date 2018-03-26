@@ -19,10 +19,12 @@ public:
 private slots:
     void on_pushButtonSave_clicked();
     void on_chngSavPlace_clicked();
+    void on_buttonSaveHelpImg_clicked();
 
 private:
     Ui::EmConf *ui;
     QString m_placeToSave;
+    QString m_helpImg;
     int m_method;
 };
 

@@ -6,6 +6,24 @@ EmFunctions::EmFunctions()
 
 }
 
+QString EmFunctions::setHelpImg(const QString &arg1)
+{
+    QString helpImg = QFileDialog::getOpenFileName(NULL, "Sélectionnez une image",
+                                                   QStandardPaths::locate(QStandardPaths::PicturesLocation, "", QStandardPaths::LocateDirectory),
+                                                   "Images (*.jpg *.png)");
+    if(helpImg == "")
+    {
+        QMessageBox::warning(NULL, "Attention !", "Pas d'image sélectionnée !");
+        return arg1;
+    }
+    else
+    {
+        QFile::copy(arg1, QStandardPaths::locate(QStandardPaths::AppDataLocation, "img/backupImg.jpg", QStandardPaths::LocateFile));
+        QFile::copy(helpImg, QStandardPaths::locate(QStandardPaths::AppDataLocation, "img", QStandardPaths::LocateDirectory));
+        return helpImg;
+    }
+}
+
 QString EmFunctions::setPlaceToSave(const QString &arg1)
 {
     QString placeToSave =  QFileDialog::getExistingDirectory(NULL, "Choisir l'emplacement de sauvegarde");
@@ -150,7 +168,9 @@ void EmFunctions::writeToConf(const bool &arg1, // Est ce que la fenetre d'accue
                               const int &arg6, // Valeur du décalage
                               const bool &arg7, // Module scores activé ?
                               const int &arg8, // Score initial
-                              const int &arg9) // coût opération
+                              const int &arg9, // coût opération
+                              bool &arg10, // Aide Pin Image activée ?
+                              QString &arg11) // helpImg
 {
 /* Fonction ayant pour objet de récupérer les paramètres enregistrés par la fenêtre EmConf
  *  et de les écrire dans un fichier .ini */
@@ -190,6 +210,18 @@ void EmFunctions::writeToConf(const bool &arg1, // Est ce que la fenetre d'accue
            confFile->setValue("initialScore", arg8);
            confFile->setValue("basicAmount", arg9);
 
+    confFile->endGroup();
+    // Groupe [Help]
+        confFile->beginGroup("Help");
+        if(!arg10)
+        {
+            confFile->setValue("isActivated", arg10);
+        }
+        else
+        {
+            confFile->setValue("isActivated", arg10);
+            confFile->setValue("helpImg", arg11);
+        }
     confFile->endGroup();
     delete confFile;
     return;

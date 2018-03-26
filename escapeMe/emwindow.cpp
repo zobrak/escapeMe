@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QKeySequence>
 
+
 EmWindow::EmWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::EmWindow)
@@ -17,6 +18,10 @@ EmWindow::EmWindow(QWidget *parent) :
     ui->stackedWidget->setCurrentIndex(0);
     setFixedSize(780,480);
     help_count = 3;
+
+    //Aide du module PIN
+    EmWindow::readConfigHelp();
+
 
     //Initialisation des scores
     readConfigScores();
@@ -59,47 +64,13 @@ EmWindow::EmWindow(QWidget *parent) :
 
 
 
+
 }
-void EmWindow::afficher1()
+void EmWindow::afficher(int number)
 {
-    afficherPin(1);
+    afficherPin(number);
 }
-void EmWindow::afficher2()
-{
-    afficherPin(2);
-}
-void EmWindow::afficher3()
-{
-    afficherPin(3);
-}
-void EmWindow::afficher4()
-{
-    afficherPin(4);
-}
-void EmWindow::afficher5()
-{
-    afficherPin(5);
-}
-void EmWindow::afficher6()
-{
-    afficherPin(6);
-}
-void EmWindow::afficher7()
-{
-    afficherPin(7);
-}
-void EmWindow::afficher8()
-{
-    afficherPin(8);
-}
-void EmWindow::afficher9()
-{
-    afficherPin(9);
-}
-void EmWindow::afficher0()
-{
-    afficherPin(0);
-}
+
 EmWindow::~EmWindow()
 {
     delete ui;
@@ -113,8 +84,22 @@ void EmWindow::openConfig()
     programmPath +="emConf.exe";
 logMessage("[openconfig()] programmPath set to :");
 logMessage(programmPath);
-    //QString programm = "/home/cmatic/devProjects/escapeMe/build-emConf-Desktop_Qt_5_10_1_GCC_64bit-Release/emConf";
+    connect(config, SIGNAL(errorOccurred(QProcess::ProcessError)) , this, SLOT(onErrorOccurred(QProcess::ProcessError)));
+    connect(config, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(onFinished(int,QProcess::ExitStatus)));
     config->start(programmPath);
+
+}
+void EmWindow::onErrorOccurred(QProcess::ProcessError error)
+{
+     logMessage(QString("[onErrorOccurred()] Error : %1").arg(error));
+}
+
+void EmWindow::onFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    logMessage(QString("[onFinished()] Exit code: %1  Exit status: %2").arg(exitCode).arg(exitStatus));
+    QProcess *p = qobject_cast<QProcess*>(sender());
+    if(p)
+        p->deleteLater(); //Une autre façon de s'assurer que la mémoire sera libérée.
 }
 QString EmWindow::getConfFile()
 {
@@ -175,8 +160,15 @@ void EmWindow::readConfigScores()
     m_scoreIsActivated = conf->value("Scores/isActivated").toBool();
     m_initialScore = conf->value("Scores/initialScore").toInt();
     m_basicAmount = conf->value("Scores/basicAmount").toInt();
+    delete conf;
 }
-
+void EmWindow::readConfigHelp()
+{
+    getConfFile();
+    QSettings* conf = new QSettings(m_confFile, QSettings::IniFormat, this);
+    m_helpImgActivated = conf->value("Help/isActivated").toBool();
+    m_helpImg = conf->value("Help/helpImg").toString();
+}
 void EmWindow::tips()
 {
     if(ui->stackedWidget->currentIndex() == 0)
@@ -215,34 +207,6 @@ void EmWindow::afficherPin(const int &number)
         tmp += number;
         ui->pinLcdNumber->display(tmp);
     }
-/* old implementation, newer is simpler
-    if(ui->pinLcdNumber->intValue() < 10)
-    {
-        int tmp;
-        tmp = ui->pinLcdNumber->intValue();
-        tmp *= 10;
-        tmp += number;
-        ui->pinLcdNumber->display(tmp);
-        return;
-    }
-    if(ui->pinLcdNumber->intValue() < 100)
-    {
-        int tmp;
-        tmp = ui->pinLcdNumber->intValue();
-        tmp *=10;
-        tmp += number;
-        ui->pinLcdNumber->display(tmp);
-        return;
-    }
-    if(ui->pinLcdNumber->intValue() < 1000)
-    {
-        int tmp;
-        tmp = ui->pinLcdNumber->intValue();
-        tmp *=10;
-        tmp += number;
-        ui->pinLcdNumber->display(tmp);
-        return;
-    } */
 }
 
 void EmWindow::initializeUserScore()
@@ -266,17 +230,24 @@ void EmWindow::winCredit(const int &amount)
 
 void EmWindow::pinDisplayHelpNr1()
 {
-    QDialog* pinHelp1 = new QDialog(this);
-    QLabel* picture = new QLabel(this);
-    QPushButton* buttonClose = new QPushButton(this);
-    QVBoxLayout* dlgLayout = new QVBoxLayout(this);
-    picture->setPixmap(QPixmap(":/img/4x4.jpg"));
-    buttonClose->setText("Ok");
-    dlgLayout->addWidget(picture);
-    dlgLayout->addWidget(buttonClose);
-    pinHelp1->setLayout(dlgLayout);
-    connect(buttonClose, SIGNAL(clicked(bool)), pinHelp1, SLOT(accept()));
-    pinHelp1->exec();
+    if(m_helpImgActivated)
+    {
+        QDialog* pinHelp1 = new QDialog(this);
+        QLabel* picture = new QLabel(this);
+        QPushButton* buttonClose = new QPushButton(this);
+        QVBoxLayout* dlgLayout = new QVBoxLayout(this);
+        picture->setPixmap(QPixmap(m_helpImg));
+        buttonClose->setText("Ok");
+        dlgLayout->addWidget(picture);
+        dlgLayout->addWidget(buttonClose);
+        pinHelp1->setLayout(dlgLayout);
+        connect(buttonClose, SIGNAL(clicked(bool)), pinHelp1, SLOT(accept()));
+        pinHelp1->exec();
+    }
+    else
+    {
+        QMessageBox::information(this, "Information", "L'aide pour trouver le code ne se situe pas dans ce programme ! Cherchez autour de vous !");
+    }
 
 }
 
@@ -401,13 +372,13 @@ void EmWindow::on_buttonHelp_clicked()
     else
     {
         QString messageQuestion;
-        messageQuestion += tr("Demander de l'aide vous coutera ");
-        messageQuestion += QString::number(m_basicAmount);
-        messageQuestion += tr(" points sur votre score ! Voulez-vous continuer ?");
+            messageQuestion += tr("Demander de l'aide vous coutera ");
+            messageQuestion += QString::number(m_basicAmount);
+            messageQuestion += tr(" points sur votre score ! Voulez-vous continuer ?");
         QString msgWindow;
-        msgWindow += tr("Ce conseil vous a coûté ");
-        msgWindow += QString::number(m_basicAmount);
-        msgWindow += tr(" points");
+            msgWindow += tr("Ce conseil vous a coûté ");
+            msgWindow += QString::number(m_basicAmount);
+            msgWindow += tr(" points");
         int confirmHelp =  QMessageBox::question(this,tr("Attention !!!"), messageQuestion);
         if(confirmHelp== QMessageBox::Yes)
         {
@@ -461,8 +432,21 @@ void EmWindow::on_stackedWidget_currentChanged(int arg1)
     int currentIndex = arg1;
     if(currentIndex == 0)
     {
-        //Affichage dans pinLcdNumber en appuyant sur les touches
-        QShortcut *shrtcut1 = new QShortcut(tr("1"), this);
+        //Affichage dans pinLcdNumber en appuyant sur les touches 0 à 9
+        shrtcutMapper = new QSignalMapper(this);
+        for(int i(0); i <= 9; i++)
+        {
+            QString stringi = QString::number(i);
+            QKeySequence key(stringi);
+            QShortcut *shrtcut = new QShortcut(key, this);
+            connect(shrtcut, SIGNAL(activated()), shrtcutMapper, SLOT(map()));
+            shrtcutMapper->setMapping(shrtcut,i);
+        }
+        connect(shrtcutMapper, SIGNAL(mapped(int)), this, SIGNAL(activated(int)));
+        connect(this, SIGNAL(activated(int)), this, SLOT(afficher(int)));
+    }
+
+ /*       QShortcut *shrtcut1 = new QShortcut(tr("1"), this);
         QShortcut *shrtcut2 = new QShortcut(tr("2"), this);
         QShortcut *shrtcut3 = new QShortcut(tr("3"), this);
         QShortcut *shrtcut4 = new QShortcut(tr("4"), this);
@@ -481,12 +465,14 @@ void EmWindow::on_stackedWidget_currentChanged(int arg1)
         connect(shrtcut7, SIGNAL(activated()), this, SLOT(afficher7()));
         connect(shrtcut8, SIGNAL(activated()), this, SLOT(afficher8()));
         connect(shrtcut9, SIGNAL(activated()), this, SLOT(afficher9()));
-        connect(shrtcut0, SIGNAL(activated()), this, SLOT(afficher0()));
-    }
+        connect(shrtcut0, SIGNAL(activated()), this, SLOT(afficher0())); */
+
 
     if(currentIndex == 1)
+    {
         readConfigDecrypt();
         ui->displaySentence->setText(m_secret);
+    }
 }
 
 //Slots fenêtre pinCode

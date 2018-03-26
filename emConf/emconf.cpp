@@ -21,12 +21,21 @@ EmConf::EmConf(QWidget *parent) : QWidget(parent), ui(new Ui::EmConf)
     ui->basicCost->setText("5");
     //Paramétrage et affichage dans la fenêtre de l'emplacement de sauvegarde par défaut
     m_placeToSave = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
+    m_helpImg =  QStandardPaths::locate(QStandardPaths::AppDataLocation, "img/helpImg.jpg", QStandardPaths::LocateFile);
     ui->defaultPTSLabel->setText(m_placeToSave);
+    ui->defaultHlpImgLabel->setText(m_helpImg);
 
     //Connections
     QObject::connect(ui->pushButtonQuit, SIGNAL(clicked(bool)), qApp, SLOT(quit()));
 }
+void EmConf::on_buttonSaveHelpImg_clicked()
+{
+    QString tmpstr = m_helpImg;
+    tmpstr = EmFunctions::setHelpImg(tmpstr);
+    m_helpImg = tmpstr;
+    ui->defaultHlpImgLabel->setText(m_helpImg);
 
+}
 void EmConf::on_chngSavPlace_clicked()
 {
 
@@ -66,6 +75,7 @@ void EmConf::on_pushButtonSave_clicked()
 
     //Appel de la fonction writeToConf(gbox1, QString )
     bool gbox1 = ui->gboxWelcomeConf->isChecked();
+    bool gbox2 = ui->gboxHelpImage->isChecked();
     QString pinCode = ui->codePinLineEdit->text();
     int pinCodeInt = pinCode.toInt();
     qDebug() << pinCodeInt;
@@ -74,8 +84,7 @@ void EmConf::on_pushButtonSave_clicked()
     int score = ui->initialScore->text().toInt();
     int cost = ui->basicCost->text().toInt();
 
-
-    EmFunctions::writeToConf(gbox1, m_placeToSave, pinCodeInt, method, cryptedChain, decalage, scoresActivated, score, cost);
+    EmFunctions::writeToConf(gbox1, m_placeToSave, pinCodeInt, method, cryptedChain, decalage, scoresActivated, score, cost, gbox2, m_helpImg);
 
 }
 
