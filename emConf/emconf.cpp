@@ -10,7 +10,8 @@ EmConf::EmConf(QWidget *parent) : QWidget(parent), ui(new Ui::EmConf)
     //As far as the crypt method nr 2 isn't operational we disable possibiliy to choose it
     ui->radioButtonMethod2->setDisabled(true);
 
-
+    //Appel de EmFunctions::findConfPlace() pour obtenir l'emplacement par défaut du fichier de sauvegarde :
+    m_placeToSave = EmFunctions::findConfPlace();
 
     QIntValidator* validPin = new QIntValidator(0,9999,ui->codePinLineEdit);
     //Paramètres d'initialisation de la fenêtre et des widgets
@@ -20,7 +21,7 @@ EmConf::EmConf(QWidget *parent) : QWidget(parent), ui(new Ui::EmConf)
     ui->initialScore->setText("100");
     ui->basicCost->setText("5");
     //Paramétrage et affichage dans la fenêtre de l'emplacement de sauvegarde par défaut
-    m_placeToSave = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
+    //m_placeToSave = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
     m_helpImg =  QStandardPaths::locate(QStandardPaths::AppDataLocation, "img/helpImg.jpg", QStandardPaths::LocateFile);
     ui->defaultPTSLabel->setText(m_placeToSave);
     ui->defaultHlpImgLabel->setText(m_helpImg);
@@ -38,13 +39,16 @@ void EmConf::on_buttonSaveHelpImg_clicked()
 }
 void EmConf::on_chngSavPlace_clicked()
 {
+    m_placeToSave = EmFunctions::setPlaceToSave(m_placeToSave);
 
-    QString tmpStr = m_placeToSave;
+
+    /* QString tmpStr = m_placeToSave;
     tmpStr = EmFunctions::setPlaceToSave(tmpStr);
-    m_placeToSave = tmpStr;
+    m_placeToSave = tmpStr;*/
     ui->defaultPTSLabel->setText(m_placeToSave);
 
 }
+
 void EmConf::on_pushButtonSave_clicked()
 {
 
@@ -91,4 +95,12 @@ void EmConf::on_pushButtonSave_clicked()
 EmConf::~EmConf()
 {
     delete ui;
+}
+
+void EmConf::on_buttonSetConfToDefault_clicked()
+{
+    QSettings conf;
+    conf.setValue("config/isNotDefault", false);
+    m_placeToSave = EmFunctions::findConfPlace();
+    ui->defaultPTSLabel->setText(m_placeToSave);
 }

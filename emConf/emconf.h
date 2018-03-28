@@ -20,6 +20,7 @@ private slots:
     void on_pushButtonSave_clicked();
     void on_chngSavPlace_clicked();
     void on_buttonSaveHelpImg_clicked();
+    void on_buttonSetConfToDefault_clicked();
 
 private:
     Ui::EmConf *ui;

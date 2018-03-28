@@ -24,6 +24,19 @@ QString EmFunctions::setHelpImg(const QString &arg1)
     }
 }
 
+QString EmFunctions::findConfPlace()
+{
+    QSettings conf;
+    bool isNotDefault = conf.value("config/isNotDefault").toBool();
+    if(!isNotDefault)
+    {
+    QString genericPlace = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
+    conf.setValue("config/confPlace", genericPlace);
+    return conf.value("config/confPlace").toString();
+    }
+    else return conf.value("config/confPlace").toString();
+
+}
 QString EmFunctions::setPlaceToSave(const QString &arg1)
 {
     QString placeToSave =  QFileDialog::getExistingDirectory(NULL, "Choisir l'emplacement de sauvegarde");
@@ -33,8 +46,14 @@ QString EmFunctions::setPlaceToSave(const QString &arg1)
                  return arg1;
 
     }
-    QMessageBox::information(NULL, "Emplacement de sauvegarde", "Vous avez sélectionné :\n" + placeToSave);
-    return placeToSave;
+    else
+    {
+        QMessageBox::information(NULL, "Emplacement de sauvegarde", "Vous avez sélectionné :\n" + placeToSave);
+        QSettings conf;
+        conf.setValue("config/isNotDefault", true);
+        conf.setValue("config/confPlace", placeToSave);
+        return placeToSave;
+    }
 }
 
 QString EmFunctions::crypt(bool const &way, const int &arg1, const QString &arg2)
