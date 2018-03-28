@@ -288,7 +288,7 @@ void EmWindow::about()
         orgURL +="</a>";
 qDebug() << orgURL;
     QString srcURL;
-        srcURL = "<a href =\"https://github.com/zobrak/escapeme\">";
+        srcURL = "<a href=\"https://github.com/zobrak/escapeme\">";
         srcURL += "Page github";
         srcURL += "</a>";
 qDebug() << srcURL;
