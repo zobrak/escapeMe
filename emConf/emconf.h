@@ -22,9 +22,15 @@ private slots:
     void on_buttonSaveHelpImg_clicked();
     void on_buttonSetConfToDefault_clicked();
 
+
+    void on_buttonSaveDebugPlace_clicked();
+
+    void on_buttonSetDefaultDebugPlace_clicked();
+
 private:
     Ui::EmConf *ui;
     QString m_placeToSave;
+    QString m_debugLogPlace;
     QString m_helpImg;
     int m_method;
 };

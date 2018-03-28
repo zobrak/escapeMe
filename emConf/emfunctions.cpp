@@ -30,13 +30,27 @@ QString EmFunctions::findConfPlace()
     bool isNotDefault = conf.value("config/isNotDefault").toBool();
     if(!isNotDefault)
     {
-    QString genericPlace = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
-    conf.setValue("config/confPlace", genericPlace);
-    return conf.value("config/confPlace").toString();
+        QString genericPlace = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
+        conf.setValue("config/confPlace", genericPlace);
+        return conf.value("config/confPlace").toString();
     }
     else return conf.value("config/confPlace").toString();
 
 }
+
+QString EmFunctions::findDebugLogPlace()
+{
+    QSettings conf;
+    bool isNotDefault = conf.value("debug/isNotDefault").toBool();
+    if(!isNotDefault)
+    {
+        QString genericPlace = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
+        conf.setValue("debug/debugLogPlace", genericPlace);
+        return genericPlace;
+    }
+    else return conf.value("debug/debugLogPlace").toString();
+}
+
 QString EmFunctions::setPlaceToSave(const QString &arg1)
 {
     QString placeToSave =  QFileDialog::getExistingDirectory(NULL, "Choisir l'emplacement de sauvegarde");
@@ -52,6 +66,25 @@ QString EmFunctions::setPlaceToSave(const QString &arg1)
         QSettings conf;
         conf.setValue("config/isNotDefault", true);
         conf.setValue("config/confPlace", placeToSave);
+        return placeToSave;
+    }
+}
+
+QString EmFunctions::setDebugLogPlaceToSave(const QString &arg1)
+{
+    QString placeToSave =  QFileDialog::getExistingDirectory(NULL, "Choisir l'emplacement de sauvegarde");
+    if(placeToSave == "")
+    {
+         QMessageBox::warning(NULL, "Attention !", "L'emplacement de sauvegarde n'a pas été modifié");
+                 return arg1;
+
+    }
+    else
+    {
+        QMessageBox::information(NULL, "Emplacement de sauvegarde", "Vous avez sélectionné :\n" + placeToSave);
+        QSettings conf;
+        conf.setValue("debug/isNotDefault", true);
+        conf.setValue("debug/debugLogPlace", placeToSave);
         return placeToSave;
     }
 }

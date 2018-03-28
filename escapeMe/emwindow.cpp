@@ -58,7 +58,7 @@ EmWindow::EmWindow(QWidget *parent) :
         ui->stackedWidget->setCurrentIndex(1);
     }
 
-    QShortcut *shrtcutLaunchConf = new QShortcut(tr("Ctrl+Shift+C"), this);
+    QShortcut *shrtcutLaunchConf = new QShortcut(tr("Ctrl+Shift+G"), this);
     //Connections
     connect(shrtcutLaunchConf, SIGNAL(activated()), this, SLOT(openConfig()));
 
@@ -82,13 +82,19 @@ void EmWindow::openConfig()
     QProcess *config = new QProcess(this);
     QString programmPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "", QStandardPaths::LocateDirectory);
     programmPath +="emConf.exe";
-logMessage("[openconfig()] programmPath set to :");
-logMessage(programmPath);
+    //Conversion du chemin dans le format de la plateforme courante
+    programmPath = QDir::toNativeSeparators(programmPath);
+logMessage(QString("[openconfig()] programmPath set to : %1").arg(programmPath));
+    connect(config, SIGNAL(started(QProcess::ProcessState)), this, SLOT(EmWindow::onProcessStarted(QProcess::ProcessState)));
     connect(config, SIGNAL(errorOccurred(QProcess::ProcessError)) , this, SLOT(onErrorOccurred(QProcess::ProcessError)));
     connect(config, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(onFinished(int,QProcess::ExitStatus)));
     config->start(programmPath);
-
 }
+void EmWindow::onProcessStarted(QProcess::ProcessState state)
+{
+    logMessage(QString("[onProcessStarted()] - Etat : %1").arg(state));
+}
+
 void EmWindow::onErrorOccurred(QProcess::ProcessError error)
 {
      logMessage(QString("[onErrorOccurred()] Error : %1").arg(error));
@@ -103,25 +109,24 @@ void EmWindow::onFinished(int exitCode, QProcess::ExitStatus exitStatus)
 }
 QString EmWindow::getConfFile()
 {
-    m_confFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
+    m_confFile = EmFunctions::findConfPlace();
+    //m_confFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
     m_confFile += "/emConf.ini";
-logMessage("[getConfFile()] - confFile path :");
-logMessage(m_confFile);
+logMessage(QString("[getConfFile()] - confFile path : %1").arg(m_confFile));
     return m_confFile;
 }
 QString EmWindow::getScoreFile()
 {
     m_scoreFile = QStandardPaths::locate(QStandardPaths::DocumentsLocation, "", QStandardPaths::LocateDirectory);
     m_scoreFile += "escapeMeScores.txt";
-logMessage("[getScoreFile() - m_scoreFile :");
-logMessage(m_scoreFile);
+logMessage(QString("[getScoreFile() - m_scoreFile : %1").arg(m_scoreFile));
     return m_scoreFile;
 }
 QString EmWindow::getLogFile()
 {
-    m_logFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
+    QSettings conf;
+    m_logFile = EmFunctions::findDebugLogPlace();
     m_logFile += "/debug.log";
-qDebug() << "m_logfile set to : " << m_logFile;
     return m_logFile;
 }
 bool EmWindow::readConfigIsPinActivated()
@@ -445,29 +450,6 @@ void EmWindow::on_stackedWidget_currentChanged(int arg1)
         connect(shrtcutMapper, SIGNAL(mapped(int)), this, SIGNAL(activated(int)));
         connect(this, SIGNAL(activated(int)), this, SLOT(afficher(int)));
     }
-
- /*       QShortcut *shrtcut1 = new QShortcut(tr("1"), this);
-        QShortcut *shrtcut2 = new QShortcut(tr("2"), this);
-        QShortcut *shrtcut3 = new QShortcut(tr("3"), this);
-        QShortcut *shrtcut4 = new QShortcut(tr("4"), this);
-        QShortcut *shrtcut5 = new QShortcut(tr("5"), this);
-        QShortcut *shrtcut6 = new QShortcut(tr("6"), this);
-        QShortcut *shrtcut7 = new QShortcut(tr("7"), this);
-        QShortcut *shrtcut8 = new QShortcut(tr("8"), this);
-        QShortcut *shrtcut9 = new QShortcut(tr("9"), this);
-        QShortcut *shrtcut0 = new QShortcut(tr("0"), this);
-        connect(shrtcut1, SIGNAL(activated()), this, SLOT(afficher1()));
-        connect(shrtcut2, SIGNAL(activated()), this, SLOT(afficher2()));
-        connect(shrtcut3, SIGNAL(activated()), this, SLOT(afficher3()));
-        connect(shrtcut4, SIGNAL(activated()), this, SLOT(afficher4()));
-        connect(shrtcut5, SIGNAL(activated()), this, SLOT(afficher5()));
-        connect(shrtcut6, SIGNAL(activated()), this, SLOT(afficher6()));
-        connect(shrtcut7, SIGNAL(activated()), this, SLOT(afficher7()));
-        connect(shrtcut8, SIGNAL(activated()), this, SLOT(afficher8()));
-        connect(shrtcut9, SIGNAL(activated()), this, SLOT(afficher9()));
-        connect(shrtcut0, SIGNAL(activated()), this, SLOT(afficher0())); */
-
-
     if(currentIndex == 1)
     {
         readConfigDecrypt();
@@ -677,14 +659,19 @@ void EmWindow::on_buttonSave_clicked()
 }
 void EmWindow::logMessage(const QString &arg1)
 {
-    getLogFile();
-    QString tmp = arg1;
-    tmp += "\n";
-    QFile log(m_logFile);
-    if (!log.open(QIODevice::Append | QIODevice::Text))
-        return;
-    QTextStream out(&log);
-    out << tmp;
+    QSettings conf;
+    if(conf.value("debug/isActivated").toBool())
+    {
+        getLogFile();
+        QString tmp = arg1;
+        tmp += "\n";
+        QFile log(m_logFile);
+        if (!log.open(QIODevice::Append | QIODevice::Text))
+            return;
+        QTextStream out(&log);
+        out << tmp;
+    }
+    return;
 }
 
 

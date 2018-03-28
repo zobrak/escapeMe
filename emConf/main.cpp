@@ -3,9 +3,9 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setApplicationName("escapeMe config");
-    QCoreApplication::setApplicationVersion("1.1.0");
-    QCoreApplication::setOrganizationName("Damien GUEDON");
+    QCoreApplication::setApplicationName("escapeMeApp");
+    QCoreApplication::setApplicationVersion("1.2.1");
+    QCoreApplication::setOrganizationName("ZobraKLab");
     QCoreApplication::setOrganizationDomain("zobrak.net");
 
     QApplication a(argc, argv);

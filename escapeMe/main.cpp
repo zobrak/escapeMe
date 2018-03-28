@@ -9,10 +9,11 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setApplicationName("escape.Me");
+    QCoreApplication::setApplicationName("escapeMeApp");
     QCoreApplication::setApplicationVersion("1.2.1");
-    QCoreApplication::setOrganizationName("D GUEDON");
+    QCoreApplication::setOrganizationName("ZobraKLab");
     QCoreApplication::setOrganizationDomain("zobrak.net");
+
     QApplication a(argc, argv);
 
     QString locale = QLocale::system().name().section('_', 0, 0);

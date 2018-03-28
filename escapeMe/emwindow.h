@@ -35,6 +35,7 @@ signals :
     void activated(int number);
 
 public slots:
+    void onProcessStarted(QProcess::ProcessState state);
     void onErrorOccurred(QProcess::ProcessError error);
     void onFinished(int exitCode, QProcess::ExitStatus exitStatus);
 

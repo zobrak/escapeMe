@@ -71,7 +71,7 @@
      </property>
      <widget class="QWidget" name="placeToSave">
       <attribute name="title">
-       <string>Emplacement de sauvegarde</string>
+       <string>Emplacements de sauvegarde</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -95,7 +95,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Emplacement du fichier de sauvegarde :</string>
+             <string>Emplacement du fichier de configuration :</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -110,6 +110,12 @@
               <height>25</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -123,13 +129,13 @@
                <bool>true</bool>
               </property>
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Enregistrer sous...</string>
+               <string>Changer...</string>
               </property>
               <property name="flat">
                <bool>false</bool>
@@ -139,7 +145,7 @@
             <item>
              <widget class="QPushButton" name="buttonSetConfToDefault">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -156,55 +162,111 @@
        </item>
        <item>
         <widget class="QGroupBox" name="gboxHelpImage">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>180</height>
+          </size>
+         </property>
          <property name="title">
           <string>Activer image d'aide code Pin</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <widget class="QWidget" name="verticalLayoutWidget_2">
-          <property name="geometry">
-           <rect>
-            <x>9</x>
-            <y>19</y>
-            <width>389</width>
-            <height>131</height>
-           </rect>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>Pour changer l'image d'indice du code pin. 
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Pour changer l'image d'indice du code pin. 
 Image actuelle :</string>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="defaultHlpImgLabel">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="buttonSaveHelpImg">
-             <property name="maximumSize">
-              <size>
-               <width>105</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Enregistrer sous...</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="defaultHlpImgLabel">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="buttonSaveHelpImg">
+            <property name="maximumSize">
+             <size>
+              <width>105</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Enregistrer sous...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>Avancé</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QCheckBox" name="isDebugLogActivated">
+            <property name="text">
+             <string>Enregistrer les informations de déboggage</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Emplacement du log de déboggage :</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="debugPlaceLBL">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QPushButton" name="buttonSaveDebugPlace">
+              <property name="text">
+               <string>Changer...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="buttonSetDefaultDebugPlace">
+              <property name="text">
+               <string>Par défaut</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>

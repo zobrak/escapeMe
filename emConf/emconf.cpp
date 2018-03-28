@@ -12,45 +12,72 @@ EmConf::EmConf(QWidget *parent) : QWidget(parent), ui(new Ui::EmConf)
 
     //Appel de EmFunctions::findConfPlace() pour obtenir l'emplacement par défaut du fichier de sauvegarde :
     m_placeToSave = EmFunctions::findConfPlace();
+    ui->defaultPTSLabel->setText(m_placeToSave);
+    //Appel de EmFunction::findDebugLogPlace() pour obtenir l'emplacement par défaut du fichier de log de doggage.
+    m_debugLogPlace = EmFunctions::findDebugLogPlace();
+    ui->debugPlaceLBL->setText(m_debugLogPlace);
+    //Image affichée dans l'aide du pincode.
+    m_helpImg =  QStandardPaths::locate(QStandardPaths::AppDataLocation, "img/helpImg.jpg", QStandardPaths::LocateFile);
+    ui->defaultHlpImgLabel->setText(m_helpImg);
+
 
     QIntValidator* validPin = new QIntValidator(0,9999,ui->codePinLineEdit);
-    //Paramètres d'initialisation de la fenêtre et des widgets
+    //Valeurs par défaut dans les champs
     ui->codePinLineEdit->setValidator(validPin);
     ui->codePinLineEdit->setText("0000");
     ui->phraseLineEdit->setText("Le chien a l'air d'avoir faim");
     ui->initialScore->setText("100");
     ui->basicCost->setText("5");
-    //Paramétrage et affichage dans la fenêtre de l'emplacement de sauvegarde par défaut
-    //m_placeToSave = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "escapeMe", QStandardPaths::LocateDirectory);
-    m_helpImg =  QStandardPaths::locate(QStandardPaths::AppDataLocation, "img/helpImg.jpg", QStandardPaths::LocateFile);
-    ui->defaultPTSLabel->setText(m_placeToSave);
-    ui->defaultHlpImgLabel->setText(m_helpImg);
 
     //Connections
     QObject::connect(ui->pushButtonQuit, SIGNAL(clicked(bool)), qApp, SLOT(quit()));
 }
+
 void EmConf::on_buttonSaveHelpImg_clicked()
 {
     QString tmpstr = m_helpImg;
     tmpstr = EmFunctions::setHelpImg(tmpstr);
     m_helpImg = tmpstr;
     ui->defaultHlpImgLabel->setText(m_helpImg);
-
 }
 void EmConf::on_chngSavPlace_clicked()
 {
     m_placeToSave = EmFunctions::setPlaceToSave(m_placeToSave);
-
-
-    /* QString tmpStr = m_placeToSave;
-    tmpStr = EmFunctions::setPlaceToSave(tmpStr);
-    m_placeToSave = tmpStr;*/
     ui->defaultPTSLabel->setText(m_placeToSave);
 
 }
 
+void EmConf::on_buttonSetConfToDefault_clicked()
+{
+    QSettings conf;
+    conf.setValue("config/isNotDefault", false);
+    m_placeToSave = EmFunctions::findConfPlace();
+    ui->defaultPTSLabel->setText(m_placeToSave);
+}
+
+void EmConf::on_buttonSaveDebugPlace_clicked()
+{
+    m_debugLogPlace = EmFunctions::setDebugLogPlaceToSave(m_debugLogPlace);
+    ui->debugPlaceLBL->setText(m_debugLogPlace);
+}
+
+void EmConf::on_buttonSetDefaultDebugPlace_clicked()
+{
+    QSettings conf;
+    conf.setValue("debug/isNotDefault", false);
+    m_debugLogPlace = EmFunctions::findDebugLogPlace();
+    ui->debugPlaceLBL->setText(m_debugLogPlace);
+}
+
 void EmConf::on_pushButtonSave_clicked()
 {
+
+    //Faut-il logger les informations de deboggage ?
+    if(ui->isDebugLogActivated->isChecked())
+    {
+        QSettings conf;
+        conf.setValue("debug/isActivated", true);
+    }
 
     //Choix de la méthode de chiffrement
     if(ui->radioButtonMethod1->isChecked())
@@ -97,10 +124,10 @@ EmConf::~EmConf()
     delete ui;
 }
 
-void EmConf::on_buttonSetConfToDefault_clicked()
-{
-    QSettings conf;
-    conf.setValue("config/isNotDefault", false);
-    m_placeToSave = EmFunctions::findConfPlace();
-    ui->defaultPTSLabel->setText(m_placeToSave);
-}
+
+
+
+
+
+
+
